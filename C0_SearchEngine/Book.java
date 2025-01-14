@@ -2,12 +2,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The Book class represents a digital book with a title, authors, content, and ratings.
+ * It supports adding ratings, retrieving information, calculating averages,
+ * and comparing books by rating and title.
+ */
 public class Book implements Media, Comparable<Book>{
     private String title;
     private List<String> author;
     private List<String> content;
     private List<Integer> rating;
-
 
     public Book(String title, List<String> authors, Scanner contentScanner){
         this.title = title;
@@ -20,9 +24,9 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Gets the title of this media.
+     * Gets the title of this Book.
      *
-     * @return The title of this media.
+     * @return The title of this Book.
      */
     @Override
     public String getTitle() {
@@ -30,9 +34,9 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Gets all artists associated with this media.
+     * Gets all authors associated with this Book.
      *
-     * @return A list of artists for this media.
+     * @return A list of artists for this Book.
      */
     @Override
     public List<String> getArtists() {
@@ -40,7 +44,7 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Adds a rating to this media.
+     * Adds a rating to this Book.
      *
      * @param score The score for the new rating. Should be non-negative.
      */
@@ -50,9 +54,9 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Gets the number of times this media has been rated.
+     * Gets the number of times this Book has been rated.
      *
-     * @return The number of ratings for this media.
+     * @return The number of ratings for this Book.
      */
     @Override
     public int getNumRatings() {
@@ -60,9 +64,9 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Gets the average (mean) of all ratings for this media.
+     * Gets the average (mean) of all ratings for this Book.
      *
-     * @return The average (mean) of all ratings for this media.
+     * @return The average (mean) of all ratings for this Book.
      * If no ratings exist, returns 0.
      */
     @Override
@@ -76,7 +80,7 @@ public class Book implements Media, Comparable<Book>{
     }
 
     /**
-     * Gets all of the content contained in this media.
+     * Gets all of the content contained in this Book.
      *
      * @ returns    The content stored in a List of strings. If there is no content, an empty list
      */
@@ -85,6 +89,13 @@ public class Book implements Media, Comparable<Book>{
         return new ArrayList<>(content);
     }
 
+    /**
+     * Gets a String description of this Book
+     *
+     * @ returns    The String description of this Book in the format `<title> by [<authors>]`
+     * if ratings is empty or `<title> by [<authors>]: <average rating> (<num ratings> ratings)`
+     * if ratings is not empty.
+     */
     @Override
     public String toString() {
         if(rating.isEmpty()){

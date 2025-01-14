@@ -2,8 +2,8 @@ import com.sun.source.tree.Tree;
 
 import java.io.*;
 import java.util.*;
-// Name: TODO
-// Date: TODO
+// Name: Joe Lin
+// Date: Jan 13, 2025
 
 // This class allows users to find and rate books within BOOK_DIRECTORY
 // containing certain terms

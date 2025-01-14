@@ -2,6 +2,9 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
+/**
+ * This class is a JUnit test for Book and SearchClient
+ */
 public class Testing {
 
     @Test
