@@ -1,3 +1,9 @@
+// C0: Search Engine
+// Name: Joe Lin
+// Date: Jan 13, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

@@ -1,3 +1,5 @@
+package Location;
+
 public class Location {
     private String name;
     private double latitude;
@@ -10,7 +12,13 @@ public class Location {
     }
     
     // TODO: Implement compareTo here:
-
+    public int compareTo(Location other) {
+        if(Math.abs(this.latitude) < Math.abs(other.latitude)) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
     
 
     public String getName() {

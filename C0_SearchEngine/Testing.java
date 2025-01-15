@@ -1,3 +1,9 @@
+// C0: Search Engine
+// Name: Joe Lin
+// Date: Jan 13, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;

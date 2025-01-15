@@ -1,3 +1,5 @@
+package Location;
+
 public class LocationClient {
     public static void main(String[] args) {
         Location northPole = new Location("Santa's house", 90, 135);

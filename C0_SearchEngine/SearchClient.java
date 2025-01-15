@@ -1,9 +1,13 @@
+// C0: Search Engine
+// Name: Joe Lin
+// Date: Jan 13, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import com.sun.source.tree.Tree;
 
 import java.io.*;
 import java.util.*;
-// Name: Joe Lin
-// Date: Jan 13, 2025
 
 // This class allows users to find and rate books within BOOK_DIRECTORY
 // containing certain terms
@@ -41,7 +45,17 @@ public class SearchClient {
         System.out.println("See you next time!");
     }
 
-    // TODO: Paste createIndex implementation & comment
+    /**
+     * Creates an inverted index mapping tokens (words) to sets of media documents containing those tokens.
+     *
+     * @param documents A list of Media objects, where each Media contains content that can be tokenized.
+     * @return A Map where the keys are lowercase tokens and the values are sets of Media objects that contain those tokens.
+     *
+     * Behavior:
+     * - Each token in the content of a Media object is converted to lowercase before being indexed.
+     * - If a token is encountered for the first time, a new entry is added to the map.
+     * - If a token already exists in the map, the corresponding Media object is added to the existing set.
+     */
     public static Map<String, Set<Media>> createIndex(List<Media> documents) {
         Map<String, Set<Media>> map = new TreeMap<>();
         for(Media media : documents){
@@ -56,7 +70,18 @@ public class SearchClient {
         return map;
     }
 
-    // TODO: Write and document your search method here
+    /**
+     * Searches the inverted index for a specific query token and returns the set of Media objects containing that token.
+     *
+     * @param index A Map where keys are tokens and values are sets of Media objects containing those tokens.
+     * @param query A string token to search for in the index.
+     * @return A set of Media objects containing the queried token. Returns an empty set if the token is not found.
+     *
+     * Behavior:
+     * - The query token is compared with each key in the index (case-insensitive comparison).
+     * - If a match is found, all associated Media objects are added to the result set.
+     * - If no match is found, an empty set is returned.
+     */
     public static Set<Media> search(Map<String, Set<Media>> index, String query) {
         Set<Media> mediaSet = new HashSet<>();
         for(String token : index.keySet()){

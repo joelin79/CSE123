@@ -1,4 +1,4 @@
-/**
+package Location; /**
  * This is the test suite used to evaluate your solution
  * to this problem when you hit "Mark"!
  * Consider viewing this code to find out how the tests work,
