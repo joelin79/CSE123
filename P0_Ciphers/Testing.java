@@ -68,6 +68,12 @@ public class Testing {
         // TODO: Create a new CaesarKey("TIN"), encrypt the message "HELLO" and check the
         //       result's accurate. Then, take the encrypted message, decrypt it, and
         //       check the result's accurate
+        Cipher caesarKey = new CaesarKey("TIN");
+        String encrypted = caesarKey.encrypt("HELLO");
+        assertEquals("OKWWV", encrypted, "Encrypted message should be 'OKWWV'");
+        String decrypted = caesarKey.decrypt(encrypted);
+        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
+
         assertEquals(true, false, "Assertion 1 not yet implemented!");
         assertEquals(true, false, "Assertion 2 not yet implemented!");
     }
@@ -81,6 +87,12 @@ public class Testing {
         // TODO: Create a new CaesarShift(6), encrypt the message "HELLO" and check the
         //       result's accurate. Then, take the encrypted message, decrypt it, and
         //       check the result's accurate
+        Cipher caesarShift = new CaesarShift(6);
+        String encrypted = caesarShift.encrypt("HELLO");
+        assertEquals("NKRRU", encrypted, "Encrypted message should be 'NKRRU'");
+        String decrypted = caesarShift.decrypt(encrypted);
+        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
+
         assertEquals(true, false, "Assertion 1 not yet implemented!");
         assertEquals(true, false, "Assertion 2 not yet implemented!");
     }
@@ -94,6 +106,14 @@ public class Testing {
         // TODO: Create a new MultiCipher with ciphers CaesarKey("TIN") and CaesarShift(6)),
         //       encrypt the message "HELLO", and check the result's accurate. Then, take
         //       the encrypted message, decrypt it, and check the result's accurate
+        Cipher caesarKey = new CaesarKey("TIN");
+        Cipher caesarShift = new CaesarShift(6);
+        MultiCipher multiCipher = new MultiCipher(Arrays.asList(caesarKey, caesarShift));
+        String encrypted = multiCipher.encrypt("HELLO");
+        assertEquals("URXXA", encrypted, "Encrypted message should be 'URXXA'");
+        String decrypted = multiCipher.decrypt(encrypted);
+        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
+
         assertEquals(true, false, "Assertion 1 not yet implemented!");
         assertEquals(true, false, "Assertion 2 not yet implemented!");
     }
