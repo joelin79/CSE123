@@ -1,13 +1,13 @@
-public class FishBear {
+package FishBearFlyingFish;
+
+public class FishBear extends Animal{
     private int fish;
     private String species;
     private String favoriteFood;
     private int age;
 
     public FishBear(int age, int fish) {
-        this.species = "FishBear";
-        this.favoriteFood = "fish";
-        this.age = age;
+        super("FishBear","fish", age);
         this.fish = fish;
     }
 

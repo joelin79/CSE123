@@ -1,3 +1,5 @@
+package FishBearFlyingFish;
+
 import java.util.*;
 
 public class AnimalClient {

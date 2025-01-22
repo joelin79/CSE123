@@ -1,15 +1,15 @@
+package FishBearFlyingFish;
+
 import java.util.*;
 
-public class FlyingFish {
+public class FlyingFish extends Animal{
     private Set<Animal> predators;
     private String species;
     private String favoriteFood;
     private int age;
 
     public FlyingFish(int age, Set<Animal> predators) {
-        this.species = "FlyingFish";
-        this.favoriteFood = "Fish Food";
-        this.age = age;
+        super("FlyingFish","Fish Food", age);
         this.predators = predators;
     }
 
