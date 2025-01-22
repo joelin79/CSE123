@@ -10,7 +10,7 @@ public abstract class Cipher {
     
     // The maximum character able to be encrypted/decrypted by any cipher
     // (we encourage you to change this value when testing!)
-    public static final int MAX_CHAR = (int)('Z');
+    public static final int MAX_CHAR = (int)('G');
     
     // The total number of characters able to be encrypted/decrypted by any cipher
     // (aka. the total number of characters in the encodable range)

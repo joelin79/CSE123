@@ -3,10 +3,10 @@ import java.io.*;
 
 public class Client {
     // TODO: Change this line once you've implemented a cipher!
-    public static final Cipher CHOSEN_CIPHER = null;
-    // public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
-    //     new CaesarShift(4), new CaesarKey("123"),
-    //     new CaesarShift(100)));
+    public static final Cipher CHOSEN_CIPHER = new CaesarShift(1);
+//     public static final Cipher CHOSEN_CIPHER = new MultiCipher(List.of(
+//         new CaesarShift(4), new CaesarKey("123"),
+//         new CaesarShift(100)));
 
     // (we also encourage you to change Cipher.MIN_CHAR and Cipher.MAX_CHAR when testing!)
     public static void main(String[] args) throws FileNotFoundException {
