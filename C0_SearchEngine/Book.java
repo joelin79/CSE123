@@ -19,6 +19,18 @@ public class Book implements Media, Comparable<Book>{
     private List<String> content;
     private List<Integer> rating;
 
+    /**
+     * Constructor for the Book class.
+     *
+     * Initializes a Book with the given title, authors, and content from a Scanner input.
+     * The content is read from the provided Scanner, where each token is added as a
+     * string to the content list. The list of ratings is initialized as an empty list.
+     *
+     * @param title The title of the book.
+     * @param authors A list of authors associated with the book.
+     * @param contentScanner A Scanner object containing the content of the book,
+     *                       with each token added to the book's content.
+     */
     public Book(String title, List<String> authors, Scanner contentScanner){
         this.title = title;
         this.author = authors;
