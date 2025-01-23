@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 import java.util.*;
 
+/**
+ * This class is to test the CaesarKey, CaesarShift, MultiCipher,
+ * and the Substitution class using JUnit
+ */
 public class Testing {
 
     @Test
@@ -19,7 +23,7 @@ public class Testing {
         Cipher testSubstitution = new Substitution("GCBEAFD");
         assertEquals("FGE", testSubstitution.encrypt("FAD"));
         assertEquals("BAD", testSubstitution.decrypt("CGE"));
-        
+
         // Per the spec, we should throw an IllegalArgumentException if 
         // the length of the encoder doesn't match the number of characters
         // within our Cipher's encodable range
@@ -36,7 +40,7 @@ public class Testing {
 
         // Reverse alphabetic
         Cipher testSubstitution = new Substitution(
-            "ZYXWVUTSRQPONMLKJIHGFEDCBA"
+                "ZYXWVUTSRQPONMLKJIHGFEDCBA"
         );
         assertEquals("UZW", testSubstitution.encrypt("FAD"));
         assertEquals("BAD", testSubstitution.decrypt("YZW"));
@@ -47,11 +51,11 @@ public class Testing {
     public void subComplexTest() {
         // Skip this test if the constants have changed
         assumeTrue(Cipher.MIN_CHAR == (int)(' ') && Cipher.MAX_CHAR == (int)('}'));
-        
+
         // Swapping lowercase a<->b
         Cipher testSubstitution = new Substitution(
-            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`" +
-            "bacdefghijklmnopqrstuvwxyz{|}"
+                " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`" +
+                        "bacdefghijklmnopqrstuvwxyz{|}"
         );
         assertEquals("FAD", testSubstitution.encrypt("FAD"));
         assertEquals("fbd", testSubstitution.encrypt("fad"));
@@ -70,12 +74,9 @@ public class Testing {
         //       check the result's accurate
         Cipher caesarKey = new CaesarKey("TIN");
         String encrypted = caesarKey.encrypt("HELLO");
-        assertEquals("OKWWV", encrypted, "Encrypted message should be 'OKWWV'");
+        assertEquals("EBJJM", encrypted);
         String decrypted = caesarKey.decrypt(encrypted);
-        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
-
-        assertEquals(true, false, "Assertion 1 not yet implemented!");
-        assertEquals(true, false, "Assertion 2 not yet implemented!");
+        assertEquals("HELLO", decrypted);
     }
 
     @Test
@@ -89,12 +90,9 @@ public class Testing {
         //       check the result's accurate
         Cipher caesarShift = new CaesarShift(6);
         String encrypted = caesarShift.encrypt("HELLO");
-        assertEquals("NKRRU", encrypted, "Encrypted message should be 'NKRRU'");
+        assertEquals("NKRRU", encrypted);
         String decrypted = caesarShift.decrypt(encrypted);
-        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
-
-        assertEquals(true, false, "Assertion 1 not yet implemented!");
-        assertEquals(true, false, "Assertion 2 not yet implemented!");
+        assertEquals("HELLO", decrypted);
     }
 
     @Test
@@ -110,11 +108,8 @@ public class Testing {
         Cipher caesarShift = new CaesarShift(6);
         MultiCipher multiCipher = new MultiCipher(Arrays.asList(caesarKey, caesarShift));
         String encrypted = multiCipher.encrypt("HELLO");
-        assertEquals("URXXA", encrypted, "Encrypted message should be 'URXXA'");
+        assertEquals("KHPPS", encrypted);
         String decrypted = multiCipher.decrypt(encrypted);
-        assertEquals("HELLO", decrypted, "Decrypted message should be 'HELLO'");
-
-        assertEquals(true, false, "Assertion 1 not yet implemented!");
-        assertEquals(true, false, "Assertion 2 not yet implemented!");
+        assertEquals("HELLO", decrypted);
     }
 }
