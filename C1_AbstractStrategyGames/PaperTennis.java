@@ -48,7 +48,9 @@ public class PaperTennis extends AbstractStrategyGame {
     public String toString() {
         String result = "\n---------------------------------------------------------\n";
         result += "[Player 1]                                              [Player 2]\n";
-        String court = "    " + player1Bid + " " + points1 + "  |          |          |" +
+        String frontSpace = player1Bid < 10 ? "    " : "   ";
+        String backSpace = points1 < 10 ? "   " : "  ";
+        String court = frontSpace + player1Bid + " " + points1 + backSpace + "|          |          |" +
                 "|          |          |  " + player2Bid + " " + points2+"\n";
         result += court.substring(0, calculateBallStrIndex(position)) + TENNIS_BALL
                 + court.substring(calculateBallStrIndex(position));
