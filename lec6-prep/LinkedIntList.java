@@ -36,12 +36,30 @@ public class LinkedIntList implements IntList {
     //       within this list, -1 if not present
     public int indexOf(int value) {
         // TODO
+        ListNode curr = front;
+        int index = 0;
+        while (curr != null) {
+            if(front.data == value) { return index; }
+            curr = curr.next;
+            index++;
+        }
         return -1;
     }
 
     // post: removes the first occurence of the given value from the list.
     public void remove(int value) {
         // TODO: Implement!
+        if (this.front == null) { return; }
+        if (front.data == value) { front = front.next;  return;}
+        ListNode curr = front;
+        while(front.next != null) {
+            if (front.data == value) {
+                front = front.next;
+                return;
+            }
+            curr = curr.next;
+        }
+
     }
 
     // post: returns the number of elements in this list

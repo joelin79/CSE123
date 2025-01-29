@@ -13,6 +13,7 @@ public class Client {
         list.add(2);
         list.add(3);
         list.printList();
+        list.printList();
     }
 
     public static void insertAfterLast(ListNode node, int x) {
