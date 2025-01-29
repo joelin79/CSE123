@@ -1,20 +1,58 @@
+// P0: Ciphers
+// Name: Joe Lin
+// Date: Jan 22, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: Write your implementation to Subsitution here!
+/**
+ * Substitution class extends Cipher and implements a basic substitution cipher.
+ *
+ * It allows defining a custom encoding where each input character is substituted
+ * based on the encoding string. The encoding must be a permutation of all valid
+ * characters, with no duplicates.
+ */
 public class Substitution extends Cipher{
 
     private String encoding;
 
-
+    /**
+     * Default constructor for the Substitution class.
+     *
+     * Initializes the Substitution object without a predefined encoding. The encoding
+     * can later be set using the setEncoding method.
+     */
     public Substitution(){
         encoding = null;
     }
 
+    /**
+     * Constructor for the Substitution class with a predefined encoding string.
+     *
+     * Sets the encoding for the substitution cipher. The encoding string must contain
+     * a permutation of all characters in the valid range and have the correct length.
+     *
+     * @param encoding The encoding string used for substitution.
+     * @throws IllegalArgumentException If the encoding string is invalid (null, incorrect length,
+     *                                  or contains duplicate/invalid characters).
+     */
     public Substitution(String encoding){
         setEncoding(encoding);
     }
 
+    /**
+     * Sets the encoding string for the substitution cipher.
+     *
+     * The encoding string defines the substitution pattern, where each character in the input
+     * is mapped to a character in the encoding string. The encoding must contain all
+     * valid characters without duplication and must match the required character set.
+     *
+     * @param encoding The encoding string for the substitution cipher.
+     * @throws IllegalArgumentException If the encoding is null, has an incorrect length,
+     *                                  or contains invalid or duplicate characters.
+     */
     public void setEncoding(String encoding){
         if(encoding == null || encoding.length() != TOTAL_CHARS){
             throw new IllegalArgumentException();
@@ -31,6 +69,17 @@ public class Substitution extends Cipher{
         this.encoding = encoding;
     }
 
+    /**
+     * Encrypts the given input string using the defined substitution encoding.
+     *
+     * Each character in the input string is substituted according to the encoding string.
+     *
+     * @param input The string to be encrypted.
+     * @return The encrypted string, where each character has been substituted according
+     * to the encoding.
+     * @throws IllegalStateException If the encoding has not been set.
+     * @throws IllegalArgumentException If the input string is null.
+     */
     @Override
     public String encrypt(String input) {
         if(encoding == null){
@@ -49,6 +98,17 @@ public class Substitution extends Cipher{
         return plainText;
     }
 
+    /**
+     * Decrypts the given input string using the defined substitution encoding.
+     *
+     * Each character in the encrypted string is reversed using the encoding string
+     * to recover the original text.
+     *
+     * @param input The string to be decrypted.
+     * @return The decrypted string, where each character has been reverted to its original form.
+     * @throws IllegalStateException If the encoding has not been set.
+     * @throws IllegalArgumentException If the input string is null.
+     */
     @Override
     public String decrypt(String input) {
         if(encoding == null){
