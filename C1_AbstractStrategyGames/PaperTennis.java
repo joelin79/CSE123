@@ -46,15 +46,15 @@ public class PaperTennis extends AbstractStrategyGame {
      */
     @Override
     public String toString() {
-        String result = "\n---------------------------------------------------------\n";
-        result += "[Player 1]                                              [Player 2]\n";
-        String frontSpace = player1Bid < 10 ? "    " : "   ";
+        String result = "\n---------------------------------------------------------------------\n";
+        result += "| [Player 1]                                             [Player 2] |\n";
+        String frontSpace = player1Bid < 10 ? "|    " : "|   ";
         String backSpace = points1 < 10 ? "   " : "  ";
-        String court = frontSpace + player1Bid + " " + points1 + backSpace + "|          |          |" +
-                "|          |          |  " + player2Bid + " " + points2+"\n";
+        String court = frontSpace + player1Bid + " " + points1 + backSpace + "[[          |        |" +
+                "|          |          ]]  " + player2Bid + " " + points2+"   |\n";
         result += court.substring(0, calculateBallStrIndex(position)) + TENNIS_BALL
                 + court.substring(calculateBallStrIndex(position));
-        result += "---------------------------------------------------------";
+        result += "---------------------------------------------------------------------";
         return result;
     }
 
@@ -74,29 +74,32 @@ public class PaperTennis extends AbstractStrategyGame {
      */
     @Override
     public int getWinner() {
-        if (!gameover()) return GAME_NOT_OVER;
 
-        if( gameover() && position > 0){
-            roundWins1 += (position > 2) ? 2 : 1;
-        }
-        if ( gameover() && position < 0){
-            roundWins2 += (position < -2) ? 2 : 1;
-        }
+        // ROUND IN PROGRESS: skip
+        if (!roundIsOver()) return GAME_NOT_OVER;
 
-        if (roundWins1 >= 3) return PLAYER_1;
-        if (roundWins2 >= 3) return PLAYER_2;
-
+        // <3 ROUND: Start next round
         if(currentRound < 3){
-            currentRound++;
             resetRound();
             return GAME_NOT_OVER;
         } else {
+            // >=3 ROUND: End game, return winner
+            printScoreboard();
             return (roundWins1 == roundWins2) ? TIE : (roundWins1 > roundWins2) ? PLAYER_1 : PLAYER_2;
         }
     }
 
-    private boolean gameover(){
-        return position < -2 || position > 2 || (points1 == 0 && points2 == 0) || currentRound > 3;
+    private void updateScore() {
+        // END OF ROUND: Award points
+        if( roundIsOver() && position > 0){
+            roundWins1 += (position > 2) ? 2 : 1;
+        } else if ( roundIsOver() && position < 0){
+            roundWins2 += (position < -2) ? 2 : 1;
+        }
+    }
+
+    private boolean roundIsOver(){
+        return position < -2 || position > 2 || (points1 == 0 && points2 == 0);
     }
 
     /**
@@ -135,12 +138,13 @@ public class PaperTennis extends AbstractStrategyGame {
             int matchWinner = (player1Bid == player2Bid) ? TIE : (player1Bid > player2Bid) ? PLAYER_1 : PLAYER_2;
             moveBall(matchWinner);
         }
-
+        updateScore();
         player1Turn = !player1Turn;
     }
 
     private void moveBall(int matchWinner){
-        if(matchWinner == PLAYER_1){
+        if(matchWinner == PLAYER_1)
+        {
             position++;
             if (position == 0){ position++; }
         } else if (matchWinner == PLAYER_2){
@@ -151,14 +155,23 @@ public class PaperTennis extends AbstractStrategyGame {
 
     private void resetRound() {
         System.out.println();
+        printScoreboard();
         System.out.println();
-        System.out.println("======== ROUND " + currentRound +" ["+roundWins1+":"+roundWins2+"] ========");
+        currentRound++;
+        System.out.println("============= ROUND " + currentRound + " =============");
         position = 0;
         points1 = 50;
         points2 = 50;
         player1Bid = 0;
         player2Bid = 0;
         player1Turn = true;
+    }
+
+    public void printScoreboard(){
+        System.out.println("======== Scoreboard [Round "+currentRound+"/3] ========");
+        System.out.println("Player 1 Score: " + roundWins1);
+        System.out.println("Player 2 Score: " + roundWins2);
+        System.out.println("========================================");
     }
 
 
