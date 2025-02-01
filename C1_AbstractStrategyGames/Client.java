@@ -1,3 +1,9 @@
+// C1: Abstract Strategy Games
+// Name: Joe Lin
+// Date: Jan 29, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import java.util.*;
 
 public class Client {

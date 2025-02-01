@@ -74,11 +74,18 @@ public class Substitution extends Cipher{
      *
      * Each character in the input string is substituted according to the encoding string.
      *
+     * Special cases to consider:
+     * - The valid range of characters for input is from MIN_CHAR to MAX_CHAR.
+     * - If an input character falls outside this range (e.g., 'X' when the range is 'A'-'G'),
+     *   the behavior is undefined and may result in an exception or incorrect encryption.
+     * - Ensure that input only contains characters within the defined range to prevent errors.
+     *
      * @param input The string to be encrypted.
      * @return The encrypted string, where each character has been substituted according
      * to the encoding.
      * @throws IllegalStateException If the encoding has not been set.
-     * @throws IllegalArgumentException If the input string is null.
+     * @throws IllegalArgumentException If the input string is null or contains characters
+     * outside the valid range.
      */
     @Override
     public String encrypt(String input) {
