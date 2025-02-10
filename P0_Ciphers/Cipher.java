@@ -64,6 +64,11 @@ public abstract class Cipher {
     //    Returns: The result of applying this Cipher's encryption scheme to `input`
     // Parameters: 'input' - the string to be encrypted. Should be non-null and all characters of
     //             'input' should be within the encodable range.
+    //    Special cases to consider:
+    //- The valid range of characters for input is from MIN_CHAR to MAX_CHAR.
+    //- If an input character falls outside this range (e.g., 'X' when the range is 'A'-'G'),
+    //  the behavior is undefined and may result in an exception or incorrect encryption.
+    //- Ensure that input only contains characters within the defined range to prevent errors.
     public abstract String encrypt(String input);
     
     //   Behavior: Applies this inverse of this Cipher's encryption scheme to 'input' (reversing
@@ -72,5 +77,10 @@ public abstract class Cipher {
     //    Returns: The result of applying the inverse of this Cipher's encryption scheme to `input`
     // Parameters: 'input' - the string to be encrypted. Should be non-null and all characters of
     //             'input' should be within the encodable range.
+    //    Special cases to consider:
+    //- The valid range of characters for input is from MIN_CHAR to MAX_CHAR.
+    //- If an input character falls outside this range (e.g., 'X' when the range is 'A'-'G'),
+    //  the behavior is undefined and may result in an exception or incorrect decryption.
+    //- Ensure that input only contains characters within the defined range to prevent errors.
     public abstract String decrypt(String input);
 }

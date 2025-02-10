@@ -175,14 +175,16 @@ public class PaperTennis extends AbstractStrategyGame {
      * players have submitted their bids.
      *
      * @param input A Scanner object to read player input.
-     * @throws IllegalArgumentException if a player bids more points than they have.
+     * @throws IllegalArgumentException if a player bids more points than they have / is negative
+     *          or when the input Scanner is null
      */
     @Override
     public void makeMove(Scanner input) {
+        if (input == null) { throw new IllegalArgumentException(); }
         System.out.print("Please enter your bid: ");
         int bid = input.nextInt();
 
-        if ((player1Turn && bid > points1)
+        if (bid < 0 || (player1Turn && bid > points1 )
                 || (!player1Turn && bid > points2)) {
             throw new IllegalArgumentException();
         }

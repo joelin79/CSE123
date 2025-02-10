@@ -37,6 +37,12 @@ public class MultiCipher extends Cipher{
      * Each cipher in the list is used to transform the input string. The output of one cipher
      * becomes the input for the next cipher in the list.
      *
+     * Special cases to consider:
+     * - The valid range of characters for input is from MIN_CHAR to MAX_CHAR.
+     * - If an input character falls outside this range (e.g., 'X' when the range is 'A'-'G'),
+     *   the behavior is undefined and may result in an exception or incorrect encryption.
+     * - Ensure that input only contains characters within the defined range to prevent errors.
+     *
      * @param input The string to be encrypted.
      * @return The encrypted string after all ciphers have been applied.
      * @throws IllegalArgumentException If the input string is null.
@@ -56,6 +62,12 @@ public class MultiCipher extends Cipher{
      * Each cipher in the list is used to reverse the encryption applied earlier. The output of
      * one cipher becomes the input for the previous cipher in the list, effectively undoing
      * the transformations applied during encryption.
+     *
+     * Special cases to consider:
+     * - The valid range of characters for input is from MIN_CHAR to MAX_CHAR.
+     * - If an input character falls outside this range (e.g., 'X' when the range is 'A'-'G'),
+     *   the behavior is undefined and may result in an exception or incorrect decryption.
+     * - Ensure that input only contains characters within the defined range to prevent errors.
      *
      * @param input The string to be decrypted.
      * @return The decrypted string after all ciphers have been reversed.

@@ -19,7 +19,7 @@ public class CaesarShift extends Substitution {
      * based on the shift. The characters are cycled through starting from the character at the
      * position of the shift, wrapping around if necessary.
      *
-     * @param shift The number of positions to shift each character in the alphabet.
+     * @param shift The number of positions to shift each character in the alphabet of the encodable range.
      * @throws IllegalArgumentException If the shift value is zero or negative.
      */
     public CaesarShift(int shift) {
