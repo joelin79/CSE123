@@ -1,11 +1,34 @@
+// P1: Mini-Git
+// Name: Joe Lin
+// Date: Feb 12, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import java.util.*;
 import java.text.SimpleDateFormat;
 
+
+/**
+ * The Repository class represents a version control system that allows users to create,
+ * store, and manage commits. Users can commit changes, check repository history,
+ * remove commits, and synchronize with other repositories.
+ *
+ * This class provides methods to interact with a repository, including retrieving the
+ * latest commit, checking for commit existence, retrieving commit history, and merging
+ * changes from another repository.
+ *
+ */
 public class Repository {
     private String name;
     private Commit head;
     private int size;
 
+    /**
+     * Constructor to initialize a repository with a given name.
+     * Throws an exception if the name is null or empty.
+     *
+     * @param name Name of the repository
+     */
     public Repository(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Repository name null or empty");
@@ -15,14 +38,29 @@ public class Repository {
         this.size = 0;
     }
 
+    /**
+     * Retrieves the ID of the latest commit.
+     *
+     * @return ID of the latest commit or null if no commits exist.
+     */
     public String getRepoHead() {
         return head == null ? null : head.id;
     }
 
+    /**
+     * Returns the number of commits in the repository.
+     *
+     * @return Number of commits.
+     */
     public int getRepoSize() {
         return size;
     }
 
+    /**
+     * Returns a string representation of the repository, showing the current head commit.
+     *
+     * @return String describing the repository's current state.
+     */
     @Override
     public String toString() {
         if (head != null) {
@@ -31,6 +69,13 @@ public class Repository {
         return name + " - No commits";
     }
 
+    /**
+     * Checks if a commit with the given ID exists in the repository.
+     *
+     * @param targetId The commit ID to check for.
+     * @return True if the commit exists, false otherwise.
+     * @throws IllegalArgumentException if the target ID is null.
+     */
     public boolean contains(String targetId) {
         if (targetId == null) {
             throw new IllegalArgumentException("Target id null");
@@ -45,6 +90,13 @@ public class Repository {
         return false;
     }
 
+    /**
+     * Retrieves the history of commits up to a specified number.
+     *
+     * @param n The maximum number of commits to return.
+     * @return A string containing commit details.
+     * @throws IllegalArgumentException if n is less than or equal to 0.
+     */
     public String getHistory(int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("History limit less than 0");
@@ -60,6 +112,13 @@ public class Repository {
         return result;
     }
 
+    /**
+     * Creates a new commit with the given message and adds it to the repository.
+     *
+     * @param message The commit message.
+     * @return The ID of the new commit.
+     * @throws IllegalArgumentException if the message is null.
+     */
     public String commit(String message) {
         if (message == null) {
             throw new IllegalArgumentException("Commit message null");
@@ -69,6 +128,13 @@ public class Repository {
         return head.id;
     }
 
+    /**
+     * Removes a commit with the specified ID from the repository.
+     *
+     * @param targetId The ID of the commit to remove.
+     * @return True if the commit was successfully removed, false otherwise.
+     * @throws IllegalArgumentException if the target ID is null.
+     */
     public boolean drop(String targetId) {
         if (targetId == null) {
             throw new IllegalArgumentException("Target id null");
@@ -96,6 +162,12 @@ public class Repository {
         return false;
     }
 
+    /**
+     * Synchronizes this repository with another repository by merging commits.
+     *
+     * @param other The repository to synchronize with.
+     * @throws IllegalArgumentException if the other repository is null.
+     */
     public void synchronize(Repository other) {
         if (other == null) {
             throw new IllegalArgumentException("other null");
@@ -105,26 +177,35 @@ public class Repository {
             other.head = null;
             other.size = 0;
         } else if (other.size != 0) {
+
+            // front case
+            if(other.head.timeStamp >= this.head.timeStamp) {
+                Commit temp = other.head;
+                other.head = other.head.past;
+                temp.past = this.head;
+                this.head = temp;
+            }
+
             Commit curr = this.head;
 
-            while(curr != null && other.head != null){
-                if(other.head.timeStamp < curr.timeStamp){
+            // mid case
+            while(curr.past != null && other.head != null){
+                if(other.head.timeStamp >= curr.past.timeStamp){
                     Commit temp = other.head;
+                    other.head = other.head.past;
                     temp.past = curr.past;
                     curr.past = temp;
-                    other.head = other.head.past;
-                } else {
-                    Commit temp = other.head;
-                    other.head = other.head.past;
-                    temp.past = curr;
                 }
                 curr = curr.past;
             }
 
-            if(curr == null){
+            // end
+            if(curr.past == null){
                 curr.past = other.head;
-                other.head = null;
             }
+            this.size += other.size;
+            other.head = null;
+            other.size = 0;
         }
     }
 

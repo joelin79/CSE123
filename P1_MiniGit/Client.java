@@ -1,3 +1,9 @@
+// P1: Mini-Git
+// Name: Joe Lin
+// Date: Feb 12, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import java.util.*;
 
 // A program to work with Mini-Git. Manages the state of repositories and allows for all

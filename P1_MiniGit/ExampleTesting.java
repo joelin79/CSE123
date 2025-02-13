@@ -1,3 +1,10 @@
+// P1: Mini-Git
+// Name: Joe Lin
+// Date: Feb 12, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;

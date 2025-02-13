@@ -1,7 +1,14 @@
+// P1: Mini-Git
+// Name: Joe Lin
+// Date: Feb 12, 2025
+// CSE 123 BK
+// TA: Benoit Le
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
+/* This class is for JUnit testing the Repository class */
 public class Testing {
     private Repository repo1;
     private Repository repo2;
@@ -16,6 +23,45 @@ public class Testing {
     }
 
     // TODO: Write your tests here!
+    @Test
+    public void testSyncEmpty() throws InterruptedException {
+        commitAll(repo1, new String[]{"a","b","c"});
+
+        repo1.synchronize(repo2);
+        assertEquals(3, repo1.getRepoSize());
+        assertEquals(0, repo2.getRepoSize());
+        testHistory(repo1, 3, new String[]{"a","b","c"});
+    }
+
+    @Test
+    public void testSyncFront() throws InterruptedException {
+        commitAll(repo2, new String[]{"a"});
+        commitAll(repo1, new String[]{"b", "c"});
+        repo1.synchronize(repo2);
+
+        testHistory(repo1, 3, new String[]{"a", "b", "c"});
+        assertEquals(0, repo2.getRepoSize());
+    }
+
+    @Test
+    public void testSyncMiddle() throws InterruptedException {
+        commitAll(repo1, new String[]{"a","b","c"});
+        commitAll(repo2, new String[]{"z"});
+        repo1.synchronize(repo2);
+
+        assertEquals(0, repo2.getRepoSize());
+        testHistory(repo1, 4, new String[]{"a", "b", "c","z"});
+    }
+
+    @Test
+    public void testSyncEnd() throws InterruptedException {
+        commitAll(repo1, new String[]{"a", "b", "c"});
+        commitAll(repo2, new String[]{"y", "z"});
+        repo1.synchronize(repo2);
+
+        assertEquals(5, repo1.getRepoSize());
+        testHistory(repo1, 5, new String[]{"a", "b", "c", "y", "z"});
+    }
 
     /////////////////////////////////////////////////////////////////////////////////
     // PROVIDED HELPER METHODS (You don't have to use these if you don't want to!) //
