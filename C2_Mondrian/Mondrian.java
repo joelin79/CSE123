@@ -7,12 +7,20 @@
 import java.awt.*;
 
 /**
- * Generates a Mondrian-style painting using recursive partitioning.
+ * Generates abstract artwork in the style of Piet Mondrian using recursive partitioning.
+ * The generated artwork consists of colored rectangular regions separated by black borders.
  */
 public class Mondrian {
 
     /**
-     * Paints a basic Mondrian-style pattern on the given pixel array.
+     * - Generates a Mondrian-style painting by recursively dividing an image into rectangular
+     *   sections, applying random colors, and ensuring black borders between sections.
+     * - Each section is divided only if its width and height are at least 1/4 of the full
+     *   canvas dimensions.
+     * - Division points are randomly chosen but ensure that each resulting section is at least
+     *   10 pixels wide and 10 pixels tall.
+     * - The final regions are filled with red, yellow, cyan, or white, leaving a one-pixel
+     *   black border around each section.
      *
      * @param pixels The 2D array of Colors representing the image.
      * @throws IllegalArgumentException if the pixels array is null or smaller than 300x300.
@@ -28,7 +36,12 @@ public class Mondrian {
     }
 
     /**
-     * Recursively partitions the canvas and fills sections with colors.
+     * - Recursively partitions the given region into smaller sections while ensuring
+     *   a minimum section size of 10x10 pixels.
+     * - The region is split along randomly chosen vertical and/or horizontal lines,
+     *   but only if the region's width and height are at least 1/4 of the full canvas size.
+     * - Each division creates up to four subregions, which are then recursively processed.
+     * - If only one dimension qualifies for division, a single split is made.
      *
      * @param pixels The pixel array representing the image.
      * @param x1 The left boundary of the current region.
@@ -86,7 +99,8 @@ public class Mondrian {
     }
 
     /**
-     * Fills a rectangular section of the pixel array with a random color, leaving black borders.
+     * - Fills a section of the image with a randomly selected color from red, yellow, cyan, or white.
+     * - Every section will have 1px black border around the section.
      *
      * @param pixels The pixel array.
      * @param x1 The left boundary.
@@ -97,15 +111,15 @@ public class Mondrian {
     private static void fill(Color[][] pixels, int x1, int x2, int y1, int y2){
         Color[] randColors = {Color.WHITE, Color.CYAN, Color.RED, Color.YELLOW};
         Color fillColor = randColors[(int)(Math.random() * 4)];
-        for(int y = y1; y < y2; y++){
-            for(int x = x1; x < x2; x++){
-                pixels[y][x] = (x==x1 || x==x2-1 || y==y1 || y==y2-1) ? Color.BLACK : fillColor;
-            }
-        }
+        createBox(pixels, x1, x2, y1, y2, fillColor);
     }
 
     /**
-     * Paints a complex Mondrian-style pattern on the given pixel array.
+     * - Generates a Mondrian-style painting where color selection is influenced by
+     *   the section’s position on the canvas.
+     * - Uses random colors (cyan, red, white, yellow), modifying their hues based on
+     *   spatial placement (more center more shifted hue).
+     * - Generates 1px black borders between sections.
      *
      * @param pixels The 2D array of Colors representing the image.
      * @throws IllegalArgumentException if the pixels array is null or smaller than 300x300.
@@ -121,7 +135,9 @@ public class Mondrian {
     }
 
     /**
-     * Recursively partitions the canvas and fills sections with a hue-based coloring scheme.
+     * - Recursively partitions the canvas and fills sections with a color whose hue
+     *   is adjusted based on the section’s position.
+     * - Ensures that all sections maintain a minimum size of 10x10 pixels.
      *
      * @param pixels The pixel array representing the image.
      * @param x1 The left boundary of the current region.
@@ -183,7 +199,11 @@ public class Mondrian {
     }
 
     /**
-     * Fills a rectangular section of the pixel array with a hue-based coloring scheme.
+     * - Fills a rectangular section of the image with a color that is adjusted based on its
+     *   position in the canvas.
+     * - A black border is maintained around the section for separation.
+     * - The base color is chosen randomly from red, yellow, cyan, and white, but its hue is
+     *   adjusted using hueColor to create variation across the image (more center more hue).
      *
      * @param pixels The pixel array.
      * @param x1 The left boundary.
@@ -198,15 +218,32 @@ public class Mondrian {
         Color fillColor = randColors[(int)(Math.random() * 4)];
         Color adjustedColor = hueColor(fillColor, (x1+x2)/2, (y1+y2)/2, width, height);
 
+        createBox(pixels, x1, x2, y1, y2, adjustedColor);
+    }
+
+
+    /**
+     * - Draws a rectangular box on a 2D array of pixels with a specified color for the interior
+     * and black for the 1px border.
+     *
+     * @param pixels The 2D array representing the pixel grid.
+     * @param x1 The starting x-coordinate of the box (inclusive).
+     * @param x2 The ending x-coordinate of the box (exclusive).
+     * @param y1 The starting y-coordinate of the box (inclusive).
+     * @param y2 The ending y-coordinate of the box (exclusive).
+     * @param color The fill color for the interior of the box.
+     */
+    private static void createBox(Color[][] pixels, int x1, int x2, int y1, int y2, Color color) {
         for(int y = y1; y < y2; y++){
             for(int x = x1; x < x2; x++){
-                pixels[y][x] = (x == x1 || x == x2-1 || y == y1 || y == y2-1) ? Color.BLACK : adjustedColor;
+                pixels[y][x] = (x == x1 || x == x2-1 || y == y1 || y == y2-1) ? Color.BLACK : color;
             }
         }
     }
 
     /**
-     * Adjusts the hue of a color based on its distance from the borders of the canvas.
+     * - Adjusts the hue of a selected color based on the region's position on the canvas.
+     * The more center the region is, the more shifted the hue is.
      *
      * @param original The original color.
      * @param x The x-coordinate of the pixel.

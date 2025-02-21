@@ -58,6 +58,7 @@ public class Repository {
 
     /**
      * Returns a string representation of the repository, showing the current head commit.
+     * If repo empty, would return "<name> - No commits"
      *
      * @return String describing the repository's current state.
      */
@@ -92,6 +93,7 @@ public class Repository {
 
     /**
      * Retrieves the history of commits up to a specified number.
+     * Will give entire history of commits if n > size of repo.
      *
      * @param n The maximum number of commits to return.
      * @return A string containing commit details.
@@ -163,7 +165,8 @@ public class Repository {
     }
 
     /**
-     * Synchronizes this repository with another repository by merging commits.
+     * Synchronizes this repository with another repository by merging commits in
+     * chronological order, and sets `other` to an empty repo.
      *
      * @param other The repository to synchronize with.
      * @throws IllegalArgumentException if the other repository is null.
@@ -171,7 +174,9 @@ public class Repository {
     public void synchronize(Repository other) {
         if (other == null) {
             throw new IllegalArgumentException("other null");
-        } else if (this.size == 0) {
+        }
+
+        if (this.size == 0) {
             this.head = other.head;
             this.size = other.size;
             other.head = null;
