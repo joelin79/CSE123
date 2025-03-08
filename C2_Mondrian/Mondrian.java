@@ -7,10 +7,17 @@
 import java.awt.*;
 
 /**
- * Generates abstract artwork in the style of Piet Mondrian using recursive partitioning.
- * The generated artwork consists of colored rectangular regions separated by black borders.
+ * Generates abstract artwork in the style of Piet Mondrian.
+ * The generated artwork consists of random colored rectangular regions separated by black borders.
+ * Supports basic and complex mode: with only random primary colors and with hued version of
+ * colors respectively.
+ * Each artwork will be random and unique compositions.
  */
 public class Mondrian {
+    public static final int MIN_CANVAS_DIMENSION = 300;
+    private static final int MAX_COLOR_VALUE = 255;
+    private static final int MIN_SECTION_DIMENSION = 10;
+    private static final int MIN_REGION_DIVISION_FACTOR = 4;
 
     /**
      * - Generates a Mondrian-style painting by recursively dividing an image into rectangular
@@ -26,7 +33,7 @@ public class Mondrian {
      * @throws IllegalArgumentException if the pixels array is null or smaller than 300x300.
      */
     public void paintBasicMondrian(Color[][] pixels) {
-        if(pixels == null || pixels.length < 300 || pixels[0].length < 300){
+        if(pixels == null || pixels.length < MIN_CANVAS_DIMENSION || pixels[0].length < MIN_CANVAS_DIMENSION){
             throw new IllegalArgumentException();
         }
         int width = pixels[0].length;
@@ -55,10 +62,10 @@ public class Mondrian {
         int w = x2 - x1;    // w of current region
         int h = y2 - y1;    // h of cur
 
-        if(w >= width/4 && h >= height/4){
+        if(w >= width/MIN_REGION_DIVISION_FACTOR && h >= height/MIN_REGION_DIVISION_FACTOR){
             //rand v and h boarder
-            int randX = (int)(Math.random() * (w - 20)) + (x1 + 10); // domain within 10px from boarder
-            int randY = (int)(Math.random() * (h - 20)) + (y1 + 10);
+            int randX = (int)(Math.random() * (w - MIN_SECTION_DIMENSION * 2)) + (x1 + MIN_SECTION_DIMENSION); // domain within 10px from boarder
+            int randY = (int)(Math.random() * (h - MIN_SECTION_DIMENSION * 2)) + (y1 + MIN_SECTION_DIMENSION);
 
             // fill
             fill(pixels, x1, randX, y1, randY);
@@ -72,9 +79,9 @@ public class Mondrian {
             paintBasicMondrian(pixels, x1, randX, randY, y2, width, height);
             paintBasicMondrian(pixels, randX, x2, randY, y2, width, height);
 
-        } else if(w >= width/4){
+        } else if(w >= width/MIN_REGION_DIVISION_FACTOR){
             //rand v boarder
-            int randX = (int)(Math.random() * (w - 20)) + (x1 + 10); // domain within 10px from boarder
+            int randX = (int)(Math.random() * (w - MIN_SECTION_DIMENSION * 2)) + (x1 + MIN_SECTION_DIMENSION); // domain within 10px from boarder
 
             // fill
             fill(pixels, x1, randX, y1, y2);
@@ -84,9 +91,9 @@ public class Mondrian {
             paintBasicMondrian(pixels, x1, randX, y1, y2, width, height);
             paintBasicMondrian(pixels, randX, x2, y1, y2, width, height);
 
-        } else if(h >= height/4){
+        } else if(h >= height/MIN_REGION_DIVISION_FACTOR){
             //rand h boarder
-            int randY = (int)(Math.random() * (h - 20)) + (y1 + 10);
+            int randY = (int)(Math.random() * (h - MIN_SECTION_DIMENSION * 2)) + (y1 + MIN_SECTION_DIMENSION);
 
             // fill
             fill(pixels, x1, x2, y1, randY);
@@ -125,7 +132,7 @@ public class Mondrian {
      * @throws IllegalArgumentException if the pixels array is null or smaller than 300x300.
      */
     public void paintComplexMondrian(Color[][] pixels) {
-        if(pixels == null || pixels.length < 300 || pixels[0].length < 300){
+        if(pixels == null || pixels.length < MIN_CANVAS_DIMENSION || pixels[0].length < MIN_CANVAS_DIMENSION){
             throw new IllegalArgumentException();
         }
         int width = pixels[0].length;
@@ -148,16 +155,16 @@ public class Mondrian {
      * @param height The overall height of the image.
      */
     private void paintComplexMondrian(Color[][] pixels, int x1, int x2, int y1, int y2, int width, int height){
-        if(pixels == null || pixels.length < 300 || pixels[0].length < 300){
+        if(pixels == null || pixels.length < MIN_CANVAS_DIMENSION || pixels[0].length < MIN_CANVAS_DIMENSION){
             throw new IllegalArgumentException();
         }
         int w = x2 - x1;    // w of current region
         int h = y2 - y1;    // h of cur
 
-        if(w >= width/4 && h >= height/4){
+        if(w >= width/MIN_REGION_DIVISION_FACTOR && h >= height/MIN_REGION_DIVISION_FACTOR){
             //rand v and h boarder
-            int randX = (int)(Math.random() * (w - 20)) + (x1 + 10); // domain within 10px from boarder
-            int randY = (int)(Math.random() * (h - 20)) + (y1 + 10);
+            int randX = (int)(Math.random() * (w - MIN_SECTION_DIMENSION * 2)) + (x1 + MIN_SECTION_DIMENSION); // domain within 10px from boarder
+            int randY = (int)(Math.random() * (h - MIN_SECTION_DIMENSION * 2)) + (y1 + MIN_SECTION_DIMENSION);
 
             // fill
             fillHue(pixels, x1, randX, y1, randY, width, height);
@@ -171,9 +178,9 @@ public class Mondrian {
             paintComplexMondrian(pixels, x1, randX, randY, y2, width, height);
             paintComplexMondrian(pixels, randX, x2, randY, y2, width, height);
 
-        } else if(w >= width/4){
+        } else if(w >= width/MIN_REGION_DIVISION_FACTOR){
             //rand v boarder
-            int randX = (int)(Math.random() * (w - 20)) + (x1 + 10); // domain within 10px from boarder
+            int randX = (int)(Math.random() * (w - MIN_SECTION_DIMENSION * 2)) + (x1 + MIN_SECTION_DIMENSION); // domain within 10px from boarder
 
             // fill
             fillHue(pixels, x1, randX, y1, y2, width, height);
@@ -183,9 +190,9 @@ public class Mondrian {
             paintComplexMondrian(pixels, x1, randX, y1, y2, width, height);
             paintComplexMondrian(pixels, randX, x2, y1, y2, width, height);
 
-        } else if(h >= height/4){
+        } else if(h >= height/MIN_REGION_DIVISION_FACTOR){
             //rand h boarder
-            int randY = (int)(Math.random() * (h - 20)) + (y1 + 10);
+            int randY = (int)(Math.random() * (h - MIN_SECTION_DIMENSION * 2)) + (y1 + MIN_SECTION_DIMENSION);
 
             // fill
             fillHue(pixels, x1, x2, y1, randY, width, height);
@@ -202,8 +209,9 @@ public class Mondrian {
      * - Fills a rectangular section of the image with a color that is adjusted based on its
      *   position in the canvas.
      * - A black border is maintained around the section for separation.
+     * - The closer the section is to the center, the higher probability of its hue being adjusted.
      * - The base color is chosen randomly from red, yellow, cyan, and white, but its hue is
-     *   adjusted using hueColor to create variation across the image (more center more hue).
+     *   adjusted using hueColor() to create variation across the image (more center more hue).
      *
      * @param pixels The pixel array.
      * @param x1 The left boundary.
@@ -213,10 +221,19 @@ public class Mondrian {
      * @param width The overall width of the image.
      * @param height The overall height of the image.
      */
-    private static void fillHue(Color[][] pixels, int x1, int x2, int y1, int y2, int width, int height){
+    private static void fillHue(Color[][] pixels, int x1, int x2, int y1, int y2,
+                                int width, int height){
         Color[] randColors = {Color.WHITE, Color.CYAN, Color.RED, Color.YELLOW};
         Color fillColor = randColors[(int)(Math.random() * 4)];
-        Color adjustedColor = hueColor(fillColor, (x1+x2)/2, (y1+y2)/2, width, height);
+
+        double x = (x1 + x2) / 2;
+        double y = (y1 + y2) / 2;
+        double distanceToBorder = Math.min(Math.min(x, width - x), Math.min(y, height - y));
+        double maxDistance = Math.min(width, height) / 2.0;
+
+        double hueProbability = distanceToBorder / maxDistance; // More center = higher p
+        Color adjustedColor = (Math.random() < hueProbability) ?
+                hueColor(fillColor, (x1+x2)/2, (y1+y2)/2, width, height) : fillColor;
 
         createBox(pixels, x1, x2, y1, y2, adjustedColor);
     }
@@ -261,9 +278,9 @@ public class Mondrian {
         int g = original.getGreen();
         int b = original.getBlue();
 
-        int huedR = (int) Math.min(255, (r * invFactor + g * factor));
-        int huedG = (int) Math.min(255, (g * invFactor + b * factor));
-        int huedB = (int) Math.min(255, (b * invFactor + r * factor));
+        int huedR = (int) Math.min(MAX_COLOR_VALUE, (r * invFactor + g * factor));
+        int huedG = (int) Math.min(MAX_COLOR_VALUE, (g * invFactor + b * factor));
+        int huedB = (int) Math.min(MAX_COLOR_VALUE, (b * invFactor + r * factor));
 
         return new Color(huedR, huedG, huedB);
     }
