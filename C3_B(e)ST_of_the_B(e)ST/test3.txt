@@ -1,0 +1,48 @@
+Hualien, Taiwan
+7.4
+15.0
+1712112000
+Chiayi, Taiwan
+6.0
+10.0
+1700000000
+Tainan, Taiwan
+5.8
+12.0
+1690000000
+Kaohsiung, Taiwan
+6.2
+20.0
+1680000000
+Taipei, Taiwan
+5.5
+8.0
+1670000000
+Taichung, Taiwan
+6.3
+18.0
+1660000000
+Yilan, Taiwan
+5.9
+10.5
+1650000000
+Pingtung, Taiwan
+6.1
+22.0
+1640000000
+Hsinchu, Taiwan
+5.7
+9.0
+1630000000
+Miaoli, Taiwan
+6.0
+11.0
+1620000000
+Nantou, Taiwan
+6.4
+16.0
+1610000000
+Taitung, Taiwan
+6.5
+14.0
+1600000000

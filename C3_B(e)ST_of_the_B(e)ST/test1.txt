@@ -1,0 +1,12 @@
+Hualien, Taiwan
+7.4
+15.0
+1712112000
+Chiayi, Taiwan
+6.0
+10.0
+1700000000
+Tainan, Taiwan
+5.8
+12.0
+1690000000
