@@ -6,6 +6,10 @@
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.*;
 
 
@@ -14,11 +18,53 @@ import java.util.*;
  * */
 public class Testing {
 
+
+    /* ---- EarthquakeReport stuff ---- */
+
     // Test for EarthquakeReport constructor and basic equality
     @Test
-    public void testEarthquakeReportCreation() {
-        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 10000);
-        assertEquals("M7.2 earthquake in Hualien, Taiwan at timestamp 10000 (depth: 15.8 km)", report.toString());
+    public void testEarthquakeReportConstructor() {
+        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
+        System.out.println(report);
+        EarthquakeReport copy = new EarthquakeReport(report);
+        assertEquals("M7.2 earthquake (depth: 15.8 km) in Hualien, Taiwan at 2024/04/03 07:58:09 (Unix 1712102289)", report.toString());
+        assertEquals("M7.2 earthquake (depth: 15.8 km) in Hualien, Taiwan at 2024/04/03 07:58:09 (Unix 1712102289)", copy.toString());
+    }
+
+    @Test
+    public void testEarthquakeReportGetDepth(){
+        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
+        assertEquals(15.8, report.getDepth());
+    }
+
+    @Test
+    public void testEarthquakeReportGetTimestamp(){
+        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
+        assertEquals(1712102289, report.getTimestamp());
+    }
+
+    @Test
+    public void testEarthquakeReportGetMagnitude(){
+        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
+        assertEquals(7.2, report.getMagnitude());
+    }
+
+    @Test
+    public void testEarthquakeReportGetLocation(){
+        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
+        assertEquals("Hualien, Taiwan", report.getLocation());
+    }
+
+    // Test for CollectionManager toString method
+    @Test
+    public void testEarthquakeReportToString() {
+        EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 6.2, 15.8, 900000);
+        EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
+
+        assertEquals(report2.toString(),
+                "M6.2 earthquake (depth: 15.8 km) in Yilan, Taiwan at 1970/01/11 18:00:00 (Unix 900000)");
+        assertEquals(report1.toString(),
+                "M7.2 earthquake (depth: 15.8 km) in Hualien, Taiwan at 1970/01/02 11:46:40 (Unix 100000)");
     }
 
     // Test for EarthquakeReport compareTo method
@@ -60,10 +106,14 @@ public class Testing {
     public void testEarthquakeReportHashCode() {
         EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
         EarthquakeReport report2 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
+        EarthquakeReport report3 = new EarthquakeReport("Yilan, Taiwan", 7.2, 15.8, 100000);
 
         // Equal objects should have equal hash codes
         assertEquals(report1.hashCode(), report2.hashCode());
+        assertNotEquals(report1.hashCode(), report3.hashCode());
     }
+
+    /* ---- Collection Manager stuff ----- */
 
     // Test for CollectionManager empty constructor
     @Test
@@ -72,12 +122,35 @@ public class Testing {
         assertEquals("Empty earthquake collection", manager.toString());
     }
 
+    // Test for CollectionManager Scanner constructor
+    @Test
+    public void testCollectionManagerFromScanner() throws FileNotFoundException {
+        EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.4, 15.0, 1712112000);
+        EarthquakeReport report2 = new EarthquakeReport("Chiayi, Taiwan", 6.0, 10.0, 1700000000);
+        EarthquakeReport report3 = new EarthquakeReport("Tainan, Taiwan", 5.8, 12.0, 1690000000);
+
+        String input = "Hualien, Taiwan\n7.4\n15.0\n1712112000\n";
+        Scanner scanner = new Scanner(input);
+        CollectionManager manager = new CollectionManager(scanner);
+
+        scanner = new Scanner(new File("test1.txt"));
+        CollectionManager managerFromFile = new CollectionManager(scanner);
+
+        assertTrue(manager.contains(report1));
+        assertTrue(managerFromFile.contains(report1));
+        assertTrue(managerFromFile.contains(report2));
+        assertTrue(managerFromFile.contains(report3));
+        assertThrows(IllegalArgumentException.class, () -> new CollectionManager(null));
+    }
+
     // Test for CollectionManager add method
     @Test
     public void testAddToCollectionManager() {
         CollectionManager manager = new CollectionManager();
+
         EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
 
+        assertFalse(manager.contains(report));
         manager.add(report);
         assertTrue(manager.contains(report));
 
@@ -101,49 +174,47 @@ public class Testing {
         assertThrows(IllegalArgumentException.class, () -> manager.contains(null));
     }
 
-    // Test for CollectionManager Scanner constructor
-    @Test
-    public void testCollectionManagerFromScanner() {
-        String input = "Hualien, Taiwan\n7.2\n15.8\n100000\n";
-        Scanner scanner = new Scanner(input);
-
-        CollectionManager manager = new CollectionManager(scanner);
-        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
-
-        assertTrue(manager.contains(report));
-        assertThrows(IllegalArgumentException.class, () -> new CollectionManager(null));
-    }
-
     // Test for CollectionManager toString method
     @Test
     public void testCollectionManagerToString() {
         CollectionManager manager = new CollectionManager();
-        EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
         EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 6.2, 15.8, 900000);
+        EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
+
 
         manager.add(report1);
         manager.add(report2);
 
         String result = manager.toString();
         System.out.println(result);
-        assertTrue(result.contains("Hualien, Taiwan"));
-        assertTrue(result.contains("Yilan, Taiwan"));
+        assertEquals(result, "Earthquake Collection:\n" +
+                "- M7.2 earthquake (depth: 15.8 km) in Hualien, Taiwan at 1970/01/02 11:46:40 (Unix 100000)\n" +
+                "- M6.2 earthquake (depth: 15.8 km) in Yilan, Taiwan at 1970/01/11 18:00:00 (Unix 900000)\n");
     }
 
     // Test for CollectionManager save method
     @Test
-    public void testCollectionManagerSave() {
+    public void testCollectionManagerSave() throws FileNotFoundException {
         CollectionManager manager = new CollectionManager();
-        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
+        EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
+        EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 6.8, 8.0, 120000);
 
-        manager.add(report);
+        // save
+        manager.add(report1);
+        manager.add(report2);
+        manager.save(new PrintStream(new File("output.txt")));
+
+        //read
+        CollectionManager managerFromSaved = new CollectionManager(new Scanner(new File("output.txt")));
+        assertTrue(managerFromSaved.contains(report1));
+        assertTrue(managerFromSaved.contains(report2));
 
         // Test save with null PrintStream
         assertThrows(IllegalArgumentException.class, () -> manager.save(null));
     }
 
     @Test
-    public void testFilterByMagnitudeRange() {
+    public void testFilterCollectionManager() {
         CollectionManager manager = new CollectionManager();
         manager.add(new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000));
         manager.add(new EarthquakeReport("Tohoku, Japan", 9.0, 12.5, 200000));

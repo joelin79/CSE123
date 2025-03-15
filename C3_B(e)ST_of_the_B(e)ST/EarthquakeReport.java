@@ -5,10 +5,13 @@
 // TA: Benoit Le
 
 import java.util.*;
+import java.time.*;
+import java.time.format.*;
 
 /**
- * Represents an earthquake report with various attributes such as location,
- * magnitude, depth, and timestamp.
+ * The EarthquakeReport class represents an earthquake report with various attributes
+ * such as location, magnitude, depth, and timestamp. This class implements the Comparable
+ * interface.
  */
 public class EarthquakeReport implements Comparable<EarthquakeReport> {
     private final String location;
@@ -108,19 +111,31 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
     }
 
     /**
+     * Converts a Unix timestamp to a formatted date-time string.
+     *
+     * @param timestamp - the Unix timestamp to convert
+     * @return a formatted date-time string in Taipei time (GMT+8)
+     */
+    private static String convertUnixToDateTime(int timestamp) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+                .withZone(ZoneId.of("Asia/Taipei"));
+        return formatter.format(Instant.ofEpochSecond(timestamp));
+    }
+
+    /**
      * Returns a string representation of the EarthquakeReport.
      *
      * @return a string representation of the EarthquakeReport
      */
     @Override
     public String toString() {
-        return String.format("M%.1f earthquake in %s at timestamp %d (depth: %.1f km)",
-                magnitude, location, timestamp, depth);
+        return String.format("M%.1f earthquake (depth: %.1f km) in %s at %s (Unix %d)",
+                magnitude, depth, location, convertUnixToDateTime(timestamp), timestamp);
     }
 
     /**
-     * Compares this EarthquakeReport to another EarthquakeReport primarily by magnitude,
-     * then by depth, and finally by timestamp and location.
+     * Compares this EarthquakeReport to another EarthquakeReport primarily by higher magnitude,
+     * then by shallower depth, and finally by timestamp (recent) and location (alphabetical).
      *
      * @param other - the EarthquakeReport to compare to
      * @return a negative integer, zero, or a positive integer as this EarthquakeReport is

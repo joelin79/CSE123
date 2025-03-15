@@ -23,7 +23,7 @@ public class CollectionManager {
         public Node right;
 
         /**
-         * Constructs an Node with the specified report and null children.
+         * Constructs a Node with the specified report with no children.
          *
          * @param report - the EarthquakeReport to store in this node
          */
@@ -32,7 +32,7 @@ public class CollectionManager {
         }
 
         /**
-         * Constructs an Node with the specified report and children.
+         * Constructs a Node with the specified report and children.
          *
          * @param report - the EarthquakeReport to store in this node
          * @param left - the left child node
@@ -42,16 +42,6 @@ public class CollectionManager {
             this.report = report;
             this.left = left;
             this.right = right;
-        }
-
-        /**
-         * Returns a string representation of this node.
-         *
-         * @return the string representation of the contained EarthquakeReport
-         */
-        @Override
-        public String toString() {
-            return report.toString();
         }
     }
 
@@ -164,8 +154,9 @@ public class CollectionManager {
 
     /**
      * Returns a string representation of the collection with reports in sorted order.
+     * (sorted first by: magnitude (high), depth (shallow), timestamp (recent), location (alphabet)
      *
-     * @return a string representation of the collection
+     * @return a string representation of the list of earthquake reports.
      */
     @Override
     public String toString() {
@@ -229,7 +220,7 @@ public class CollectionManager {
 
     /**
      * Filter earthquakes by magnitude range.
-     * Creative extension method that returns a list of earthquake reports with
+     * Returns a list of earthquake reports with
      * magnitude within the specified range (inclusive).
      *
      * @param minMagnitude - the minimum magnitude to filter by
@@ -252,29 +243,27 @@ public class CollectionManager {
      */
     private void filter(Node current, double minMagnitude, double maxMagnitude,
                                          List<EarthquakeReport> result) {
-        if (current == null) {
-            return;
-        }
+        if (current != null) {
+            // Get magnitude directly from the report
+            double magnitude = current.report.getMagnitude();
 
-        // Get magnitude directly from the report
-        double magnitude = current.report.getMagnitude();
+            // Check if this node meets the criteria
+            if (magnitude >= minMagnitude && magnitude <= maxMagnitude) {
+                result.add(current.report);
+            }
 
-        // Check if this node meets the criteria
-        if (magnitude >= minMagnitude && magnitude <= maxMagnitude) {
-            result.add(current.report);
-        }
+            // Since we're sorting by magnitude in descending order in our compareTo,
+            // we can optimize the search by checking if we should continue down certain paths
 
-        // Since we're sorting by magnitude in descending order in our compareTo,
-        // we can optimize the search by checking if we should continue down certain paths
+            // Check left subtree (higher magnitudes) if max bound allows
+            if (magnitude <= maxMagnitude) {
+                filter(current.left, minMagnitude, maxMagnitude, result);
+            }
 
-        // Check left subtree (higher magnitudes) if max bound allows
-        if (magnitude <= maxMagnitude) {
-            filter(current.left, minMagnitude, maxMagnitude, result);
-        }
-
-        // Check right subtree (lower magnitudes) if min bound allows
-        if (magnitude >= minMagnitude) {
-            filter(current.right, minMagnitude, maxMagnitude, result);
+            // Check right subtree (lower magnitudes) if min bound allows
+            if (magnitude >= minMagnitude) {
+                filter(current.right, minMagnitude, maxMagnitude, result);
+            }
         }
     }
 }
