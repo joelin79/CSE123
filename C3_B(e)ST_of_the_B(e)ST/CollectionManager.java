@@ -53,9 +53,9 @@ public class CollectionManager {
     }
 
     /**
-     * Constructs a CollectionManager and loads earthquake reports from a file.
+     * Constructs a CollectionManager and loads earthquake reports from an input Scanner.
      *
-     * @param input - Scanner connected to the input file
+     * @param input - Scanner connected to the input file or String.
      * @throws IllegalArgumentException if input is null
      */
     public CollectionManager(Scanner input) {
@@ -109,7 +109,6 @@ public class CollectionManager {
         } else if (compareResult > 0) {
             current.right = add(current.right, report);
         }
-        // If compareResult == 0, the report is already in the tree, so we don't add it again
 
         return current;
     }
@@ -156,7 +155,8 @@ public class CollectionManager {
      * Returns a string representation of the collection with reports in sorted order.
      * (sorted first by: magnitude (high), depth (shallow), timestamp (recent), location (alphabet)
      *
-     * @return a string representation of the list of earthquake reports.
+     * @return a title & bullet-point style string representation of the list of earthquake reports.
+     *          returns "Empty earthquake collection" if empty.
      */
     @Override
     public String toString() {
@@ -185,7 +185,7 @@ public class CollectionManager {
     }
 
     /**
-     * Saves the collection to a file in pre-order traversal.
+     * Saves the collection to a .txt file.
      *
      * @param output - the PrintStream to write to
      * @throws IllegalArgumentException if output is null
@@ -206,13 +206,13 @@ public class CollectionManager {
      */
     private void save(Node current, PrintStream output) {
         if (current != null) {
-            // Save the current node's data
+
             EarthquakeReport report = current.report;
             output.println(report.getLocation());
             output.println(report.getMagnitude());
             output.println(report.getDepth());
             output.println(report.getTimestamp());
-            // Save left and right subtrees
+
             save(current.left, output);
             save(current.right, output);
         }
@@ -223,8 +223,8 @@ public class CollectionManager {
      * Returns a list of earthquake reports with
      * magnitude within the specified range (inclusive).
      *
-     * @param minMagnitude - the minimum magnitude to filter by
-     * @param maxMagnitude - the maximum magnitude to filter by
+     * @param minMagnitude - the minimum magnitude to filter by (inclusive)
+     * @param maxMagnitude - the maximum magnitude to filter by (inclusive)
      * @return a list of earthquake reports meeting the criteria
      */
     public List<EarthquakeReport> filter(double minMagnitude, double maxMagnitude) {
@@ -244,23 +244,13 @@ public class CollectionManager {
     private void filter(Node current, double minMagnitude, double maxMagnitude,
                                          List<EarthquakeReport> result) {
         if (current != null) {
-            // Get magnitude directly from the report
             double magnitude = current.report.getMagnitude();
-
-            // Check if this node meets the criteria
             if (magnitude >= minMagnitude && magnitude <= maxMagnitude) {
                 result.add(current.report);
             }
-
-            // Since we're sorting by magnitude in descending order in our compareTo,
-            // we can optimize the search by checking if we should continue down certain paths
-
-            // Check left subtree (higher magnitudes) if max bound allows
             if (magnitude <= maxMagnitude) {
                 filter(current.left, minMagnitude, maxMagnitude, result);
             }
-
-            // Check right subtree (lower magnitudes) if min bound allows
             if (magnitude >= minMagnitude) {
                 filter(current.right, minMagnitude, maxMagnitude, result);
             }

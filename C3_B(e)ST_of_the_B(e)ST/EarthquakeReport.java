@@ -23,8 +23,8 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
      * Constructs an EarthquakeReport object with the specified attributes.
      *
      * @param location - the location where the earthquake occurred
-     * @param magnitude - the magnitude of the earthquake
-     * @param depth - the depth of the earthquake in kilometers
+     * @param magnitude - the magnitude of the earthquake (non-negative)
+     * @param depth - the depth of the earthquake in kilometers (non-negative)
      * @param timestamp - the Unix timestamp when the earthquake occurred (in seconds)
      */
     public EarthquakeReport(String location, double magnitude, double depth, int timestamp) {
@@ -39,7 +39,7 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
     }
 
     /**
-     * Copy constructor to create a new EarthquakeReport with the same attributes as another.
+     * Clone a new EarthquakeReport from another.
      *
      * @param report - the EarthquakeReport object to copy
      */
@@ -114,7 +114,7 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
      * Converts a Unix timestamp to a formatted date-time string.
      *
      * @param timestamp - the Unix timestamp to convert
-     * @return a formatted date-time string in Taipei time (GMT+8)
+     * @return a formatted date-time string in Taipei time (GMT+8 aka Asia/Taipei)
      */
     private static String convertUnixToDateTime(int timestamp) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
@@ -124,6 +124,9 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
 
     /**
      * Returns a string representation of the EarthquakeReport.
+     * Format (no line break):
+     * M[magnitude] earthquake (depth: [depth] km) in [location]
+     *                                      at [yyyy/MM/dd HH:mm:ss] (Unix [Unix])
      *
      * @return a string representation of the EarthquakeReport
      */
@@ -139,7 +142,8 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
      *
      * @param other - the EarthquakeReport to compare to
      * @return a negative integer, zero, or a positive integer as this EarthquakeReport is
-     *         less than, equal to, or greater than the specified EarthquakeReport
+     *         less than (comes before), equal to, or greater (comes after)
+     *         than the specified EarthquakeReport
      */
     @Override
     public int compareTo(EarthquakeReport other) {
@@ -164,6 +168,8 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
 
     /**
      * Checks if this EarthquakeReport is equal to another object.
+     * Two EarthquakeReports are considered equal when they have the same magnitude,
+     * depth, location, and timestamp.
      *
      * @param o - the object to compare to
      * @return true if the objects are equal, false otherwise
@@ -185,7 +191,7 @@ public class EarthquakeReport implements Comparable<EarthquakeReport> {
     }
 
     /**
-     * Returns a hash code value for this EarthquakeReport.
+     * Returns a unique hash code value for this EarthquakeReport.
      *
      * @return a hash code value for this EarthquakeReport
      */

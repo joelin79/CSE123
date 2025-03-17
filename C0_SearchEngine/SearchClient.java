@@ -46,15 +46,19 @@ public class SearchClient {
     }
 
     /**
-     * Creates an inverted index mapping tokens (words) to sets of media documents containing those tokens.
+     * Creates an inverted index mapping tokens (words) to sets of media documents containing
+     * those tokens.
      *
-     * @param documents A list of Media objects, where each Media contains content that can be tokenized.
-     * @return A Map where the keys are lowercase tokens and the values are sets of Media objects that contain those tokens.
+     * @param documents A list of Media objects, where each Media contains content that can be
+     *                  tokenized.
+     * @return A Map where the keys are lowercase tokens and the values are sets of Media objects
+     * that contain those tokens.
      *
      * Behavior:
-     * - Each token in the content of a Media object is converted to lowercase before being indexed.
+     * - Each token in the content of a Media object is converted to lowercase before being index.
      * - If a token is encountered for the first time, a new entry is added to the map.
-     * - If a token already exists in the map, the corresponding Media object is added to the existing set.
+     * - If a token already exists in the map, the corresponding Media object is added to the
+     * existing set.
      */
     public static Map<String, Set<Media>> createIndex(List<Media> documents) {
         Map<String, Set<Media>> map = new TreeMap<>();
@@ -71,11 +75,14 @@ public class SearchClient {
     }
 
     /**
-     * Searches the inverted index for a specific query token and returns the set of Media objects containing that token.
+     * Searches the inverted index for a specific query token and returns the set of Media objects
+     * containing that token.
      *
-     * @param index A Map where keys are tokens and values are sets of Media objects containing those tokens.
+     * @param index A Map where keys are tokens and values are sets of Media objects containing
+     *              those tokens.
      * @param query A string token to search for in the index.
-     * @return A set of Media objects containing the queried token. Returns an empty set if the token is not found.
+     * @return A set of Media objects containing the queried token. Returns an empty set if the
+     * token is not found.
      *
      * Behavior:
      * - The query token is compared with each key in the index (case-insensitive comparison).

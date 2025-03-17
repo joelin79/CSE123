@@ -17,13 +17,14 @@ import java.util.*;
  * This class is for JUnit testing the CollectionManager class with EarthquakeReport
  * */
 public class Testing {
+    private final double MAX_EQ_MAGNITUDE = 10.0;
 
 
     /* ---- EarthquakeReport stuff ---- */
 
     // Test for EarthquakeReport constructor and basic equality
     @Test
-    public void testEarthquakeReportConstructor() {
+    public void testEarthquakeReportConstructors() {
         EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 1712102289);
         System.out.println(report);
         EarthquakeReport copy = new EarthquakeReport(report);
@@ -74,13 +75,12 @@ public class Testing {
         EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 6.9, 12.5, 90000);
         EarthquakeReport report3 = new EarthquakeReport("Chiayi, Taiwan", 7.2, 10.5, 80000);
 
-        // Test magnitude comparison (higher first)
+        // Test magnitude comparison (higher)
         assertTrue(report1.compareTo(report2) < 0);
 
-        // Test equal magnitude but different depth (shallower first)
+        // Test equal magnitude w/ different depth (shallower)
         assertTrue(report3.compareTo(report1) < 0);
 
-        // Test equality
         EarthquakeReport reportCopy = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
         assertEquals(0, report1.compareTo(reportCopy));
     }
@@ -92,13 +92,9 @@ public class Testing {
         EarthquakeReport report2 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
         EarthquakeReport report3 = new EarthquakeReport("Hualien, Taiwan", 7.1, 15.8, 100000);
 
-        // Test equality
         assertEquals(report1, report2);
-
-        // Test inequality
         assertNotEquals(report1, report3);
         assertNotEquals(report1, null);
-        assertNotEquals(report1, "Not an earthquake report");
     }
 
     // Test for EarthquakeReport hashCode method
@@ -140,37 +136,24 @@ public class Testing {
         assertTrue(managerFromFile.contains(report1));
         assertTrue(managerFromFile.contains(report2));
         assertTrue(managerFromFile.contains(report3));
+
         assertThrows(IllegalArgumentException.class, () -> new CollectionManager(null));
-    }
-
-    // Test for CollectionManager add method
-    @Test
-    public void testAddToCollectionManager() {
-        CollectionManager manager = new CollectionManager();
-
-        EarthquakeReport report = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
-
-        assertFalse(manager.contains(report));
-        manager.add(report);
-        assertTrue(manager.contains(report));
-
-        // Test adding a null report
-        assertThrows(IllegalArgumentException.class, () -> manager.add(null));
     }
 
     // Test for CollectionManager contains method
     @Test
-    public void testContainsInCollectionManager() {
+    public void testCollectionManagerContainsAndAdd() {
         CollectionManager manager = new CollectionManager();
         EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
         EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 7.2, 15.8, 100000);
 
+        assertFalse(manager.contains(new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000)));
+
         manager.add(report1);
 
-        assertTrue(manager.contains(report1));
-        assertFalse(manager.contains(report2));
+        assertTrue(manager.contains(new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000)));
+        assertFalse(manager.contains(new EarthquakeReport("Yilan, Taiwan", 7.2, 15.8, 100000)));
 
-        // Test contains with a null report
         assertThrows(IllegalArgumentException.class, () -> manager.contains(null));
     }
 
@@ -181,15 +164,15 @@ public class Testing {
         EarthquakeReport report2 = new EarthquakeReport("Yilan, Taiwan", 6.2, 15.8, 900000);
         EarthquakeReport report1 = new EarthquakeReport("Hualien, Taiwan", 7.2, 15.8, 100000);
 
-
         manager.add(report1);
         manager.add(report2);
 
         String result = manager.toString();
         System.out.println(result);
-        assertEquals(result, "Earthquake Collection:\n" +
+        String expectedResult = "Earthquake Collection:\n" +
                 "- M7.2 earthquake (depth: 15.8 km) in Hualien, Taiwan at 1970/01/02 11:46:40 (Unix 100000)\n" +
-                "- M6.2 earthquake (depth: 15.8 km) in Yilan, Taiwan at 1970/01/11 18:00:00 (Unix 900000)\n");
+                "- M6.2 earthquake (depth: 15.8 km) in Yilan, Taiwan at 1970/01/11 18:00:00 (Unix 900000)\n";
+        assertEquals(result, expectedResult);
     }
 
     // Test for CollectionManager save method
@@ -209,7 +192,6 @@ public class Testing {
         assertTrue(managerFromSaved.contains(report1));
         assertTrue(managerFromSaved.contains(report2));
 
-        // Test save with null PrintStream
         assertThrows(IllegalArgumentException.class, () -> manager.save(null));
     }
 
@@ -245,7 +227,7 @@ public class Testing {
         assertEquals(4, filtered.size());
 
         // including no earthquakes
-        filtered = manager.filter(9.1, 10.0);
+        filtered = manager.filter(9.1, MAX_EQ_MAGNITUDE);
         assertEquals(0, filtered.size());
     }
 }

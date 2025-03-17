@@ -13,6 +13,9 @@ import java.util.*;
  * and saving/loading the classifier model to/from a file.
  */
 public class Classifier {
+    private static final int FEATURE_PREFIX_LENGTH = 9;
+    private static final int THRESHOLD_PREFIX_LENGTH = 11;
+
     private ClassifierNode overallRoot;
 
     /**
@@ -67,12 +70,9 @@ public class Classifier {
 
         // decision
         if (line.startsWith("Feature: ")) {
-            String feature = line.substring(9);
-            double threshold = Double.parseDouble(input.nextLine().substring(11));
-            ClassifierNode node = new ClassifierNode(feature, threshold);
-            node.left = buildTree(input);
-            node.right = buildTree(input);
-            return node;
+            String feature = line.substring(FEATURE_PREFIX_LENGTH);
+            double threshold = Double.parseDouble(input.nextLine().substring(THRESHOLD_PREFIX_LENGTH));
+            return new ClassifierNode(feature, threshold, buildTree(input), buildTree(input));
         }
 
         // label
@@ -101,16 +101,12 @@ public class Classifier {
 
             String feature = node.data.findBiggestDifference(data);
             double threshold = midpoint(node.data.get(feature), data.get(feature));
-            ClassifierNode decisionNode = new ClassifierNode(feature, threshold);
 
             if (data.get(feature) < threshold) {
-                decisionNode.left = new ClassifierNode(label, data);
-                decisionNode.right = node;
+                return new ClassifierNode(feature, threshold, new ClassifierNode(label, data), node);
             } else {
-                decisionNode.left = node;
-                decisionNode.right = new ClassifierNode(label, data);
+                return new ClassifierNode(feature, threshold, node, new ClassifierNode(label, data));
             }
-            return decisionNode;
         }
 
         if (data.get(node.feature) < node.threshold) {
@@ -211,14 +207,17 @@ public class Classifier {
          * Constructs a decision node.
          * @param feature The feature used for decision-making.
          * @param threshold The threshold value for branching.
+         * @param left The left child node.
+         * @param right The right child node.
          */
-        public ClassifierNode(String feature, double threshold) {
+        public ClassifierNode(String feature, double threshold,
+                              ClassifierNode left, ClassifierNode right) {
             this.feature = feature;
             this.threshold = threshold;
             this.label = null;
             this.data = null;
-            this.left = null;
-            this.right = null;
+            this.left = left;
+            this.right = right;
         }
 
         /**

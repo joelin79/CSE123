@@ -20,16 +20,12 @@ public class Book implements Media, Comparable<Book>{
     private List<Integer> rating;
 
     /**
-     * Constructor for the Book class.
-     *
-     * Initializes a Book with the given title, authors, and content from a Scanner input.
-     * The content is read from the provided Scanner, where each token is added as a
-     * string to the content list. The list of ratings is initialized as an empty list.
+     * Constructs a Book with a given title, list of authors, and content.
+     * The content is read from the provided Scanner.
      *
      * @param title The title of the book.
-     * @param authors A list of authors associated with the book.
-     * @param contentScanner A Scanner object containing the content of the book,
-     *                       with each token added to the book's content.
+     * @param authors A list of authors of the book.
+     * @param contentScanner A Scanner containing the book's content.
      */
     public Book(String title, List<String> authors, Scanner contentScanner){
         this.title = title;
@@ -100,7 +96,7 @@ public class Book implements Media, Comparable<Book>{
     /**
      * Gets all of the content contained in this Book.
      *
-     * @ returns    The content stored in a List of strings. If there is no content, an empty list
+     * @return The content stored in a List of strings. If there is no content, an empty list
      */
     @Override
     public List<String> getContent() {
@@ -110,7 +106,7 @@ public class Book implements Media, Comparable<Book>{
     /**
      * Gets a String description of this Book
      *
-     * @ returns    The String description of this Book in the format `<title> by [<authors>]`
+     * @return The String description of this Book in the format `<title> by [<authors>]`
      * if ratings is empty or `<title> by [<authors>]: <average rating> (<num ratings> ratings)`
      * if ratings is not empty.
      */
